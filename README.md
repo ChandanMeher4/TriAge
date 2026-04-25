@@ -1,3 +1,13 @@
+---
+title: TriAge
+emoji: 🚀
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 <div align="center">
 
 <img src="./public/icon.png" alt="Triage Icon" width="120" />
