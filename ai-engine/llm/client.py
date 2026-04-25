@@ -7,9 +7,9 @@ from typing import Literal, Optional
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
-from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-Provider = Literal["openai", "anthropic", "groq"]
+Provider = Literal["openai", "anthropic", "gemini"]
 
 # Ensure .env is loaded even when modules are invoked directly (e.g. python -c ...)
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
@@ -17,8 +17,8 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 def get_provider() -> Provider:
     provider = os.getenv("LLM_PROVIDER", "openai").strip().lower()
-    if provider not in {"openai", "anthropic", "groq"}:
-        raise ValueError(f"Unsupported LLM_PROVIDER '{provider}'. Use 'openai', 'anthropic', or 'groq'.")
+    if provider not in {"openai", "anthropic", "gemini"}:
+        raise ValueError(f"Unsupported LLM_PROVIDER '{provider}'. Use 'openai', 'anthropic', or 'gemini'.")
     return provider  # type: ignore[return-value]
 
 
@@ -37,12 +37,12 @@ def get_architect_llm() -> Optional[object]:
         model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         return ChatOpenAI(model=model, temperature=0)
 
-    if provider == "groq":
-        api_key = os.getenv("GROQ_API_KEY", "").strip()
+    if provider == "gemini":
+        api_key = os.getenv("GEMINI_API_KEY", "").strip()
         if not api_key:
             return None
-        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-        return ChatGroq(model=model, temperature=0)
+        model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+        return ChatGoogleGenerativeAI(model=model, google_api_key=api_key, temperature=0)
 
     api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
     if not api_key:

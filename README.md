@@ -50,9 +50,9 @@ GITHUB_SECRET=<your-oauth-app-client-secret>
 GITHUB_PERSONAL_ACCESS_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
 
 # Choose your LLM Provider
-LLM_PROVIDER=groq
-GROQ_API_KEY=gsk_...
-GROQ_MODEL=llama-3.3-70b-versatile
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=AIza...
+GEMINI_MODEL=gemini-1.5-flash
 # OR
 # ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxxxx
 
@@ -317,7 +317,7 @@ Hack-karo/
 │   └── components/               ← React components for UI/Dashboard
 ├── ai-engine/                    ← Python FastAPI backend for AI processing
 │   ├── sentinel/agents/          ← Logic for Architect, Watchdog, Healer, etc.
-│   ├── llm/client.py             ← LLM provider configuration (Groq/Anthropic)
+│   ├── llm/client.py             ← LLM provider configuration (Gemini/Anthropic)
 │   └── server.py                 ← LangGraph orchestration endpoints
 ├── docs/                         ← Architecture diagrams & workbooks
 └── .env                          ← Environment variables (git-ignored)
@@ -332,7 +332,7 @@ Hack-karo/
 | **Frontend** | Next.js 14 (App Router), React 18, Tailwind CSS, Framer Motion, Three.js |
 | **Auth** | Auth.js (NextAuth v4) — GitHub, Google, GitLab OAuth + Email/Password |
 | **Database** | MongoDB Atlas (users, sessions, test traces, agent memory) |
-| **AI/LLM** | Claude 3.5/4 (Anthropic) or Llama 3.3 (Groq) via LangGraph multi-agent orchestration |
+| **AI/LLM** | Claude 3.5/4 (Anthropic) or Gemini 1.5 Flash (Google) via LangGraph multi-agent orchestration |
 | **MCP Servers** | GitHub MCP, Playwright MCP, Prometheus MCP, Slack MCP |
 | **Testing** | Playwright (headless Chromium, accessibility-tree based) |
 | **Observability** | Prometheus, Grafana, Datadog |

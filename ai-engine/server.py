@@ -40,7 +40,7 @@ class GenerateTestPlanRequest(BaseModel):
 
 class GenerateTestPlanResponse(BaseModel):
     test_plan: str
-    provider: str  # "mock" | "openai" | "anthropic" | "groq"
+    provider: str  # "mock" | "openai" | "anthropic" | "gemini"
 
 
 class AnalyzeFailureRequest(BaseModel):
@@ -64,14 +64,14 @@ async def health_check():
     provider = os.getenv("LLM_PROVIDER", "openai")
     has_openai_key = bool(os.getenv("OPENAI_API_KEY", "").strip())
     has_anthropic_key = bool(os.getenv("ANTHROPIC_API_KEY", "").strip())
-    has_groq_key = bool(os.getenv("GROQ_API_KEY", "").strip())
+    has_gemini_key = bool(os.getenv("GEMINI_API_KEY", "").strip())
 
     return {
         "status": "healthy",
         "service": "sentinelqa-ai-engine",
         "version": "1.0.0",
         "llm_provider": provider,
-        "llm_available": has_openai_key or has_anthropic_key or has_groq_key,
+        "llm_available": has_openai_key or has_anthropic_key or has_gemini_key,
     }
 
 
@@ -111,7 +111,7 @@ async def generate_test_plan(request: GenerateTestPlanRequest):
         has_key = bool(
             os.getenv("OPENAI_API_KEY", "").strip()
             or os.getenv("ANTHROPIC_API_KEY", "").strip()
-            or os.getenv("GROQ_API_KEY", "").strip()
+            or os.getenv("GEMINI_API_KEY", "").strip()
         )
         provider_used = provider if has_key else "mock"
 

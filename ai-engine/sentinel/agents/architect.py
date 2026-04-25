@@ -6,7 +6,7 @@ __all__ = ["architect_node"]
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
-from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from sentinel.state import SentinelState
 
@@ -80,12 +80,12 @@ def _build_architect_llm():
         model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         return ChatOpenAI(model=model, temperature=0)
 
-    if provider == "groq":
-        groq_key = os.getenv("GROQ_API_KEY", "").strip()
-        if not groq_key:
+    if provider == "gemini":
+        gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
+        if not gemini_key:
             return None
-        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-        return ChatGroq(model=model, temperature=0)
+        model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+        return ChatGoogleGenerativeAI(model=model, google_api_key=gemini_key, temperature=0)
 
     if provider == "anthropic":
         anthropic_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
