@@ -1,33 +1,42 @@
-# ── Build stage ───────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Install system dependencies, Node.js, and Playwright dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the working directory in the container
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
-
+# Copy the entire repository into the container
 COPY . .
+
+# 1. Setup Python AI Engine
+WORKDIR /app/ai-engine
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 2. Setup Next.js Frontend
+WORKDIR /app
+# Install frontend dependencies
+RUN npm install
+
+# Install Playwright and its Chromium dependencies
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN npx playwright install --with-deps chromium
+
+# Build the Next.js app for production
 RUN npm run build
 
-# ── Production stage ─────────────────────────────────────────────────────────
-FROM node:20-bookworm-slim AS runner
-WORKDIR /app
+# Make the start script executable
+RUN chmod +x /app/start.sh
 
-ENV NODE_ENV=production
-ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-ENV DEBIAN_FRONTEND=noninteractive
+# Expose the port Hugging Face Spaces expects (7860)
+EXPOSE 7860
 
-# Copy application files
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-# Install @playwright/mcp globally, then use ITS OWN playwright-core
-# to install the exact matching chromium revision it expects.
-RUN npm install -g @playwright/mcp@0.0.68 && \
-    /usr/local/lib/node_modules/@playwright/mcp/node_modules/.bin/playwright install --with-deps chromium
-
-EXPOSE 3000
-
-CMD ["node", "server.js"]
+# Command to run both the FastAPI server and Next.js frontend
+CMD ["/app/start.sh"]
