@@ -1,0 +1,296 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 250 15% 6%;
+    --foreground: 0 0% 96%;
+
+    --card: 250 12% 10%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 250 12% 10%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 263 70% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 82% 52%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 250 10% 16%;
+    --muted-foreground: 250 8% 55%;
+
+    --accent: 38 92% 50%;
+    --accent-foreground: 250 15% 6%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 250 10% 18%;
+    --input: 250 10% 18%;
+    --ring: 263 70% 58%;
+
+    --radius: 0.75rem;
+
+    --violet: 263 70% 58%;
+    --violet-foreground: 0 0% 100%;
+    --rose: 340 82% 52%;
+    --rose-foreground: 0 0% 100%;
+    --amber: 38 92% 50%;
+    --amber-foreground: 250 15% 6%;
+
+    --sidebar-background: 250 12% 8%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 263 70% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 250 10% 16%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 250 10% 18%;
+    --sidebar-ring: 263 70% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  /* ── Skeuomorphic glass ──────────────────────────────────────── */
+  .glass {
+    background: linear-gradient(
+      145deg,
+      hsl(250 12% 12% / 0.7),
+      hsl(250 12% 8% / 0.6)
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.04),
+      0 4px 24px -4px hsl(0 0% 0% / 0.4);
+  }
+
+  .glass-strong {
+    background: linear-gradient(
+      145deg,
+      hsl(250 12% 14% / 0.85),
+      hsl(250 12% 9% / 0.8)
+    );
+    backdrop-filter: blur(32px);
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.06),
+      inset 0 -1px 0 0 hsl(0 0% 0% / 0.2),
+      0 8px 32px -8px hsl(0 0% 0% / 0.5);
+  }
+
+  /* ── Skeuomorphic raised card ────────────────────────────────── */
+  .skeuo-card {
+    background: linear-gradient(
+      165deg,
+      hsl(250 12% 14%),
+      hsl(250 12% 10%)
+    );
+    border: 1px solid hsl(250 10% 22%);
+    border-radius: var(--radius);
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.06),
+      inset 0 -1px 0 0 hsl(0 0% 0% / 0.15),
+      0 4px 16px -4px hsl(0 0% 0% / 0.5),
+      0 12px 40px -8px hsl(263 70% 58% / 0.06);
+  }
+
+  .skeuo-card:hover {
+    border-color: hsl(263 70% 58% / 0.3);
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.08),
+      inset 0 -1px 0 0 hsl(0 0% 0% / 0.15),
+      0 8px 24px -4px hsl(0 0% 0% / 0.5),
+      0 16px 48px -8px hsl(263 70% 58% / 0.1);
+    transform: translateY(-1px);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── Skeuomorphic inset / recessed panel ─────────────────────── */
+  .skeuo-inset {
+    background: hsl(250 15% 7%);
+    border: 1px solid hsl(250 10% 12%);
+    border-radius: var(--radius);
+    box-shadow:
+      inset 0 2px 8px hsl(0 0% 0% / 0.4),
+      inset 0 1px 2px hsl(0 0% 0% / 0.3);
+  }
+
+  /* ── Skeuomorphic button (raised) ────────────────────────────── */
+  .skeuo-btn {
+    background: linear-gradient(
+      180deg,
+      hsl(263 70% 62%),
+      hsl(263 70% 50%)
+    );
+    border: 1px solid hsl(263 70% 40%);
+    box-shadow:
+      inset 0 1px 0 0 hsl(263 70% 75% / 0.4),
+      0 2px 8px -2px hsl(263 70% 30% / 0.6),
+      0 4px 16px -4px hsl(0 0% 0% / 0.4);
+    transition: all 0.15s ease;
+  }
+
+  .skeuo-btn:hover {
+    background: linear-gradient(
+      180deg,
+      hsl(263 70% 65%),
+      hsl(263 70% 53%)
+    );
+    box-shadow:
+      inset 0 1px 0 0 hsl(263 70% 80% / 0.4),
+      0 4px 12px -2px hsl(263 70% 40% / 0.6),
+      0 8px 24px -4px hsl(0 0% 0% / 0.4);
+    transform: translateY(-1px);
+  }
+
+  .skeuo-btn:active {
+    background: linear-gradient(
+      180deg,
+      hsl(263 70% 48%),
+      hsl(263 70% 45%)
+    );
+    box-shadow:
+      inset 0 2px 4px hsl(0 0% 0% / 0.3),
+      0 1px 2px hsl(0 0% 0% / 0.3);
+    transform: translateY(0);
+  }
+
+  /* ── Glows ───────────────────────────────────────────────────── */
+  .glow-violet {
+    box-shadow: 0 0 20px hsl(var(--violet) / 0.25), 0 0 60px hsl(var(--violet) / 0.08);
+  }
+
+  .glow-rose {
+    box-shadow: 0 0 20px hsl(var(--rose) / 0.25), 0 0 60px hsl(var(--rose) / 0.08);
+  }
+
+  .glow-amber {
+    box-shadow: 0 0 20px hsl(var(--amber) / 0.25), 0 0 60px hsl(var(--amber) / 0.08);
+  }
+
+  /* Backward compat aliases */
+  .glow-cyan {
+    box-shadow: 0 0 20px hsl(var(--violet) / 0.25), 0 0 60px hsl(var(--violet) / 0.08);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px hsl(var(--rose) / 0.25), 0 0 60px hsl(var(--rose) / 0.08);
+  }
+
+  /* ── Text gradients ──────────────────────────────────────────── */
+  .text-gradient-cyan {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--violet)), hsl(var(--rose)));
+  }
+
+  .text-gradient-violet {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(263, 70%, 65%), hsl(340, 82%, 60%));
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--amber)), hsl(var(--rose)));
+  }
+
+  /* ── Neon/embossed borders ───────────────────────────────────── */
+  .neon-border {
+    border: 1px solid hsl(var(--violet) / 0.2);
+  }
+
+  .neon-border-hover:hover {
+    border-color: hsl(var(--violet) / 0.5);
+    box-shadow: 0 0 15px hsl(var(--violet) / 0.12);
+  }
+
+  .emboss-border {
+    border: 1px solid hsl(250 10% 22%);
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.05),
+      0 1px 3px hsl(0 0% 0% / 0.3);
+  }
+
+  /* ── Noise texture overlay ───────────────────────────────────── */
+  .noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 1;
+  }
+}
+
+/* ── Keyframe Animations ───────────────────────────────────────── */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes circuit-flow {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes typing-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes liveness-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes emboss-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.06),
+      0 4px 16px -4px hsl(0 0% 0% / 0.5),
+      0 0 20px hsl(263 70% 58% / 0.05);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.1),
+      0 4px 16px -4px hsl(0 0% 0% / 0.5),
+      0 0 30px hsl(263 70% 58% / 0.12);
+  }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}

@@ -1,0 +1,77 @@
+services:
+  # ── Next.js App ──────────────────────────────────────────────────────────
+  sentinelqa-app:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/sentinelqa
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN}
+      - GITHUB_ID=${GITHUB_ID:-}
+      - GITHUB_SECRET=${GITHUB_SECRET:-}
+      - GOOGLE_ID=${GOOGLE_ID:-}
+      - GOOGLE_SECRET=${GOOGLE_SECRET:-}
+      - GITLAB_ID=${GITLAB_ID:-}
+      - GITLAB_SECRET=${GITLAB_SECRET:-}
+      - AI_ENGINE_URL=http://ai-engine:5000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      ai-engine:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── MongoDB ──────────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── AI Engine (Aaskar's Python service) ──────────────────────────────────
+  # Note: Port 5000 works in Docker. For local dev on macOS, use PORT=8000 if
+  # AirPlay Receiver is using port 5000.
+  ai-engine:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - ./ai-engine:/app
+    ports:
+      - "5000:5000"
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-3-5-sonnet-20241022}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - PORT=5000
+      - HOST=0.0.0.0
+      - SENTINEL_BACKEND_URL=http://sentinelqa-app:3000
+    command: >
+      sh -c "
+        pip install --no-cache-dir -r requirements.txt &&
+        python server.py
+      "
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
