@@ -71,7 +71,7 @@ export class PlaywrightMCPClient {
       process.env.PLAYWRIGHT_MCP_PACKAGE ?? "@playwright/mcp@0.0.68";
     console.log(`[MCP Client] Starting MCP server via npx ${mcpPackage}`);
 
-    const npxArgs = ["-y", mcpPackage];
+    const npxArgs = [mcpPackage];
     if (this.config.headless) {
       npxArgs.push("--headless");
     }
